@@ -65,6 +65,15 @@ def getFoursquarePhotos(venue_id,desiredtimestamp,eventlength,foursquare_client_
             pictures.append({"url":url, "caption":formatted_time})
     return pictures
 
+def createWebpage(page):
+    try:
+        f = open("latipics_results.html", "w")
+        try:
+            f.write(page)
+        finally:
+            f.close()
+    except IOError:
+        print "There has been a problem with writing the file!"
 
 def getResults(date, duration, distance, venue_id, instagram_client_id, foursquare_client_id, foursquare_client_secret, webpage = False):
         desiredtime      = time.strptime(date,"%Y%m%d%H")
@@ -73,63 +82,62 @@ def getResults(date, duration, distance, venue_id, instagram_client_id, foursqua
         distance         = int(distance)
         html = ""
         pictures=[]
+        try:
+            venue_data = getVenueData(venue_id)
+            html += "<!DOCTYPE html><html><head><title>Pictures on"+ time.strftime("%m/%d/%Y %H:00", desiredtime)+"</title></head><body>"
+            html += "<h1>Pictures from "+venue_data["name"]+"</h1>"
         
-        venue_data = getVenueData(venue_id)
-        html += "<!DOCTYPE html><html><head><title>Pictures on"+ time.strftime("%m/%d/%Y %H:00", desiredtime)+"</title></head><body>"
-        html += "<h1>Pictures from "+venue_data["name"]+"</h1>"
+            html += "<h2 style='clear:both'>Instagram Photos</h2>"
+            instagramPhotos = getInstagramPhotos(venue_data["lat"],venue_data["lng"],distance,desiredtimestamp,eventlength,instagram_client_id)
+            pictures.extend(instagramPhotos)
+            html += generateThumbs(instagramPhotos)
         
-        html += "<h2 style='clear:both'>Instagram Photos</h2>"
-        instagramPhotos = getInstagramPhotos(venue_data["lat"],venue_data["lng"],distance,desiredtimestamp,eventlength,instagram_client_id)
-        pictures.extend(instagramPhotos)
-        html += generateThumbs(instagramPhotos)
+            html += "<h2 style='clear:both'>Foursquare photos</h2>"
+            foursquarePhotos = getFoursquarePhotos(venue_id,desiredtimestamp,eventlength,foursquare_client_id, foursquare_client_secret)
+            pictures.extend(foursquarePhotos)
+            html += generateThumbs(foursquarePhotos)
         
-        html += "<h2 style='clear:both'>Foursquare photos</h2>"
-        foursquarePhotos = getFoursquarePhotos(venue_id,desiredtimestamp,eventlength,foursquare_client_id, foursquare_client_secret)
-        pictures.extend(foursquarePhotos)
-        html += generateThumbs(foursquarePhotos)
-        
-        html += "</body></html>"
-        if webpage: return html
-        else: return pictures
+            html += "</body></html>"
+            
+            if webpage: createWebpage(html)
+        except Exception as e:
+            print "There has been a problem, double check venue id and your API credentials"
+            print e.strerror
+        finally:
+            return pictures
 
 def main():
     global outputtimeformat
     p = argparse.ArgumentParser()
     p.add_argument('-d',
                  '--date',
-                 nargs='?',
-                 default=time.strftime("%Y%m%d%H"),
                  help='Insert date and time as YYYYMMDDHH')
     p.add_argument('-v',
                  '--venue',
-                 nargs='?',
-                 default="3fd66200f964a520dbe31ee3",
                  help='Insert venue ID')
     p.add_argument('-dr',
                  '--duration',
                  nargs='?',
-                 default="10000000",
+                 default="1000",
                  help='Event length in hours')
     p.add_argument('-ds',
                  '--distance',
                  nargs='?',
-                 default="100",
+                 default="10",
                  help='Distance tolerance in meters')
     p.add_argument('-inst',
                  '--instagram_client_id',
-                 nargs='?',
                  help='Instagram client_id for API calls')
     p.add_argument('-fsid',
                  '--foursquare_client_id',
-                 nargs='?',
                  help='Foursquare client_id for API calls')
     p.add_argument('-fssec',
                  '--foursquare_client_secret',
-                 nargs='?',
                  help='Foursquare client_secret for API calls')
     args = p.parse_args()
 
-    print getResults(args.date, args.duration, args.distance, args.venue, args.instagram_client_id, args.foursquare_client_id, args.foursquare_client_secret, webpage=True)
+    getResults(args.date, args.duration, args.distance, args.venue, args.instagram_client_id, args.foursquare_client_id, args.foursquare_client_secret, webpage=True)
+    print "Done."
     
 if __name__ == '__main__' : 
 	main()

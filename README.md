@@ -12,13 +12,19 @@ The start-date is pecified as YYYYMMDDHH, the duration is expressed in hours.
 
 You can quickly use it by navigating to the script's folder and typing:
 ```
-python latipics.py -d 2013082720 -v VENUE_ID -dr 6 -inst INSTAGRAM_CLIENT_ID -fsid FOURSQUARE_CLIENT_ID -fssec FOURSQUARE_CLIENT_SECRET
+python latipics.py -d 2013082720 -v VENUE_ID -dr 6 -inst INSTAGRAM_CLIENT_ID -fsid FOURSQUARE_CLIENT_ID -fssec FOURSQUARE_CLIENT_SECRET > results.html
 ```
+Then go take a look to the resulting results.html page.
 
 If you need some more options, ask for help and see what's available:
 ```
 python latipics.py -h
 ```
+
+Troubleshooting
+---------------
+It's something really quickly put together, if it raises some keyError double check the venue_id and your API credentials.
+If the results are empty, that is very likely to happen with short periods of time (e.g. a 5 hours small event). Try to specify a date from 2 months ago and enter a 2000 hours duration and see what happens.
 
 License
 -------
