@@ -12,9 +12,9 @@ The start-date is pecified as YYYYMMDDHH, the duration is expressed in hours.
 
 You can quickly use it by navigating to the script's folder and typing:
 ```
-python latipics.py -d 2013082720 -v VENUE_ID -dr 6 -inst INSTAGRAM_CLIENT_ID -fsid FOURSQUARE_CLIENT_ID -fssec FOURSQUARE_CLIENT_SECRET
+python latipics.py -v VENUE_ID -dr 6 -inst INSTAGRAM_CLIENT_ID -fsid FOURSQUARE_CLIENT_ID -fssec FOURSQUARE_CLIENT_SECRET
 ```
-Then go take a look to the resulting latipics_results.html page.
+Then go take a look to the resulting latipics_results.html page. You should see there the pictures from that venue taken during the last week. (Instagram limits this, but you can enter bigger timeranges and that will work with foursquare up to 200 pics)
 
 If you need some more options, ask for help and see what's available:
 ```

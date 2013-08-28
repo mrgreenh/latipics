@@ -43,6 +43,8 @@ def getVenueData(venue_id):
 
 def getInstagramPhotos(lat,lng,distance,desiredtimestamp,eventlength,instagram_client_id):
     request_url = "https://api.instagram.com/v1/media/search?client_id="+instagram_client_id+"&lat="+str(lat)+"&lng="+str(lng)+"&max_timestamp="+str(desiredtimestamp+eventlength)+"&min_timestamp="+str(desiredtimestamp)+"&distance="+str(distance)
+    #Pictures can be retrieved by foursquare location id as well -> higher precision but lower recall
+    
     data = getData(request_url)
     pictures = []
     for photo in data["data"]:
@@ -108,17 +110,20 @@ def getResults(date, duration, distance, venue_id, instagram_client_id, foursqua
 
 def main():
     global outputtimeformat
+    default_time = time.strftime("%Y%m%d%H",time.gmtime(time.time() - 518400))
     p = argparse.ArgumentParser()
     p.add_argument('-d',
                  '--date',
-                 help='Insert date and time as YYYYMMDDHH')
+                 nargs='?',
+                 default=default_time,
+                 help='Insert (UTC) date and time as YYYYMMDDHH')
     p.add_argument('-v',
                  '--venue',
                  help='Insert venue ID')
     p.add_argument('-dr',
                  '--duration',
                  nargs='?',
-                 default="1000",
+                 default="144",
                  help='Event length in hours')
     p.add_argument('-ds',
                  '--distance',
