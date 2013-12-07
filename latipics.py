@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 #
-"""Foobar.py: Description of what foobar does."""
+"""Latipics gathers pictures taken at a particular venue using FOursquare and Instagram"""
 
 __author__      = "Carlo Andrea Conte"
 __copyright__   = "Copyright 2013, Mahaya, inc."
