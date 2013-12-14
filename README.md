@@ -28,7 +28,6 @@ If the results are empty, that is very likely to happen with short periods of ti
 
 License
 -------
-(C) Copyright 2013 Carlo Andrea Conte <carloandreaconte@icloud.com> 
 MIT license
 
 Greetings
